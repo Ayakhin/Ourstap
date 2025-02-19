@@ -29,7 +29,7 @@ git clone https://github.com/Moh-testit/Ourstap.git
 ```
 
 ### **2️⃣ Installer les dépendances**
-Assure-toi d’avoir Python **3.x** installé, puis exécute :
+Assurez-vous d’avoir Python **3.x** installé, puis exécute :
 ```bash
 pip install pycryptodome
 ```
@@ -38,16 +38,16 @@ pip install pycryptodome
 
 ## **📌 Comment utiliser le chat ?**
 ### **1️⃣ Démarrer le serveur**
-Lance cette commande dans un terminal :
+Lancez cette commande dans un terminal :
 ```bash
 python chat.py server ou utiliser un venv l'executer dedans par exemple /Users/test/Ourstap/Ourstap/.venv/bin/python chat.py server
 ```
 📌 **Le serveur écoutera sur `127.0.0.1:5555` et attendra des connexions.**
 
 ### **2️⃣ Ouvrir plusieurs clients**
-Dans **deux autres terminaux**, exécute :
+Dans **deux autres terminaux**, exécutez :
 ```bash
-python script.py client
+python script.py client ou dans le venv à remplacer avec le vôtre :  /Users/test/Ourstap/Ourstap/.venv/bin/python chat.py client
 ```
 💡 **Chaque client génère sa propre clé RSA et reçoit une clé AES sécurisée.**
 
@@ -72,7 +72,7 @@ Vous : Salut !
 
 ## **📌 Tests de Sécurité**
 ✅ **Vérifier que les messages sont chiffrés**  
-Ajoute ces logs dans le client pour observer :
+Ajoutez ces logs si ce n'est pas encore fait dans le client pour observer :
 ```python
 print(f"[DEBUG] Message chiffré AES : {encrypted_message}")
 ```
@@ -81,7 +81,7 @@ Dans un terminal :
 ```bash
 sudo tcpdump -i lo0 -A port 5555
 ```
-📌 **Tu ne dois voir que des messages illisibles (chiffrés en AES).**
+📌 **Vous ne devez voir que des messages illisibles (chiffrés en AES).**
 
 ---
 
@@ -93,14 +93,14 @@ sudo tcpdump -i lo0 -A port 5555
 ---
 
 ## **📌 Auteur & Licence**
-👤 **Développé par : Mohamed Mazu]**  
+👤 **Développé par : Mohamed Mazu, Sidy James DIATTA et Ryan HILLIMAN]**  
 📜 **Licence : MIT**  
 📌 **Projet Open-Source - Contribuez et améliorez-le !** 🚀  
 
 ---
 
 ### **💬 Besoin d’aide ? Une suggestion ?**
-Ouvre une **issue** sur GitHub ou contacte-moi ! 😊
+Ouvrez une **issue** sur GitHub ou contactez-nous ! 😊
 
 ---
 🚀 **Bon chat sécurisé !** 🔐
