@@ -30,8 +30,7 @@ Ce projet est une **application de chat sécurisée** utilisant un **chiffrement
 ## **📌 Installation**
 ### **1️⃣ Cloner le projet**
 ```bash
-git clone https://github.com/ton-repo/chat-e2ee.git
-cd chat-e2ee
+git clone https://github.com/Moh-testit/Ourstap.git
 ```
 
 ### **2️⃣ Installer les dépendances**
@@ -54,14 +53,14 @@ pip install -r requirements.txt
 ### **1️⃣ Démarrer le serveur**
 Lancez cette commande dans un terminal :
 ```bash
-python chat.py server
+python chat.py server ou avec le venv exemple : /Users/test/Ourstap/Ourstap/.venv/bin/python chat.py server
 ```
 📌 **Le serveur écoutera sur `127.0.0.1:5555` et attendra des connexions.**
 
 ### **2️⃣ Ouvrir plusieurs clients**
 Dans **deux autres terminaux**, exécutez :
 ```bash
-python chat.py client
+python chat.py client ou avec le venv exemple : /Users/test/Ourstap/Ourstap/.venv/bin/python chat.py client
 ```
 💡 **Chaque client génère sa propre clé RSA et reçoit une clé AES sécurisée.**
 
@@ -179,7 +178,7 @@ sudo tcpdump -i lo0 port 5555 -A
 ---
 
 ## **📌 Auteur & Licence**
-👤 **Développé par : [Ton Nom]**  
+👤 **Développé par : Sidy James DIATTA, Mohamed MAZU et Rayan HILLIMAN**  
 📜 **Licence : MIT**  
 📌 **Projet Open-Source - Contribuez et améliorez-le !** 🚀  
 
