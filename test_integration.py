@@ -22,25 +22,17 @@ class TestIntegration(unittest.TestCase):
 
     def test_client_to_client_communication(self):
         """Test that two clients can communicate through the server"""
-        # Start Client 1 in a separate thread
         client1 = Client(port=5566, interactive=False)
-
-        # Start Client 2 in a separate thread
         client2 = Client(port=5566, interactive=False)
 
         time.sleep(1)  # Ensure both clients are connected before sending messages
 
-        # Client 1 sends a message
         client1.send_message("Hello from Client 1")
         time.sleep(1)  # Allow message processing
 
-        # Client 2 receives the message
         received_message = client2.receive_messages()
-
-        # Check if Client 2 received the correct message
         self.assertEqual(received_message, "Hello from Client 1")
 
-        # Close both clients after the test
         client1.client.close()
         client2.client.close()
 

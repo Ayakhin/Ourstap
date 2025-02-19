@@ -87,41 +87,44 @@ class Server:
 
 # Classe du client
 class Client:
-    def __init__(self, host='127.0.0.1', port=5555):
-        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Création du socket client
-        self.client.connect((host, port))  # Connexion au serveur
-        self.private_key, self.public_key = generate_rsa_keys()  # Génération des clés RSA
-        self.client.send(self.public_key)  # Envoi de la clé publique au serveur
-        encrypted_aes_key = self.client.recv(1024).decode('utf-8')  # Réception de la clé AES chiffrée
-        self.aes_key = decrypt_rsa(self.private_key, encrypted_aes_key)  # Déchiffrement de la clé AES
+    def __init__(self, host='127.0.0.1', port=5555, interactive=True):
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.connect((host, port))
+        self.private_key, self.public_key = generate_rsa_keys()
+        self.client.send(self.public_key)
+        encrypted_aes_key = self.client.recv(1024).decode('utf-8')
+        self.aes_key = decrypt_rsa(self.private_key, encrypted_aes_key)
         print("Connecté au serveur !")
-        threading.Thread(target=self.receive_messages, daemon=True).start()  # Lancement du thread de réception des messages
-        self.run()
-    
-    # Envoi d'un message au serveur
+
+        threading.Thread(target=self.receive_messages, daemon=True).start()
+
+        # Only enter interactive mode for manual users
+        if interactive:
+            self.run()
+
     def send_message(self, message):
-        print(f"[DEBUG] Message original : {message}")        
-        encrypted_message = encrypt_aes(self.aes_key, message.encode('utf-8'))  # Chiffrement du message
-        print(f"[DEBUG] Message chiffré AES : {encrypted_message}")
-        self.client.send(json.dumps({"message": encrypted_message}).encode('utf-8'))  # Envoi au serveur
-    
-    # Réception des messages du serveur
+        encrypted_message = encrypt_aes(self.aes_key, message.encode('utf-8'))
+        self.client.send(json.dumps({"message": encrypted_message}).encode('utf-8'))
+
     def receive_messages(self):
         while True:
             try:
                 data = self.client.recv(1024).decode('utf-8')
+                if not data:
+                    break
+                print(f"[DEBUG] Message chiffré reçu : {data}")
+
                 data = json.loads(data)
-                print(f"[DEBUG] Message chiffré reçu : {data}") #DEBUG
-                message = decrypt_aes(self.aes_key, data["message"]).decode('utf-8')  # Déchiffrement du message
+                message = decrypt_aes(self.aes_key, data["message"]).decode('utf-8')
+
+                print(f"[DEBUG] Message déchiffré : {message}")
                 print("Message reçu:", message)
+
+                return message  # Allows tests to verify received messages
             except:
                 self.client.close()
                 break
 
-    def run(self):
-        while True:
-            message = input("Vous : ")
-            self.send_message(message)
 
 # Exécution principale
 if __name__ == "__main__":
