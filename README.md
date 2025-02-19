@@ -6,7 +6,7 @@ Ce projet est une **application de chat sécurisée** utilisant un **chiffrement
 
 ## **🛠️ Technologies Utilisées**
 - **Python** → Langage de programmation principal.
-- **Sockets** → Communication entre le serveur et les clients.
+- **Sockets** → Communication réseau entre le serveur et les clients.
 - **PyCryptodome** → Librairie de cryptographie utilisée pour RSA & AES.
 - **Threading** → Permet au serveur de gérer plusieurs clients simultanément.
 - **JSON** → Format pour structurer les messages envoyés.
@@ -25,8 +25,7 @@ Ce projet est une **application de chat sécurisée** utilisant un **chiffrement
 ## **🚀 Installation**
 ### **1️⃣ Cloner le projet**
 ```bash
-git clone https://github.com/ton-repo/chat-e2ee.git
-cd chat-e2ee
+git clone https://github.com/Moh-testit/Ourstap.git
 ```
 
 ### **2️⃣ Installer les dépendances**
