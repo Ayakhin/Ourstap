@@ -24,3 +24,27 @@ class TestCryptoFunctions(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+import unittest
+from unittest.mock import patch, MagicMock
+from chat import Server, Client
+
+class TestChatServer(unittest.TestCase):
+
+    @patch('socket.socket')  # Mock the socket object
+    def test_server_accepts_connections(self, mock_socket):
+        """Test that the server accepts client connections"""
+        mock_client_socket = MagicMock()
+        mock_socket.return_value.accept.return_value = (mock_client_socket, ('127.0.0.1', 5555))
+
+        server = Server()
+        server_thread = patch.object(server, 'handle_client', return_value=None).start()  # Mock client handler
+
+        # Simulate client connection
+        server.start()
+
+        self.assertTrue(mock_client_socket in server.clients)
+
+if __name__ == '__main__':
+    unittest.main()

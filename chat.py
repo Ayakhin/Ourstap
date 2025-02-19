@@ -65,19 +65,22 @@ class Server:
 
     # Fonction pour gérer un client connecté
     def handle_client(self, client_socket):
-        client_public_key = client_socket.recv(1024)  # Récupération de la clé publique du client
-        encrypted_aes_key = encrypt_rsa(client_public_key, self.aes_key)  # Chiffrement de la clé AES avec RSA
-        client_socket.send(encrypted_aes_key.encode('utf-8'))  # Envoi de la clé AES chiffrée au client
-        
-        while True:
-            try:
-                message = client_socket.recv(1024)  # Réception du message chiffré du client
-                self.broadcast(message, client_socket)  # Transmission aux autres clients
-            except:
-                self.clients.remove(client_socket)
-                client_socket.close()
-                break
+        try:
+            client_public_key = client_socket.recv(1024)  
+            encrypted_aes_key = encrypt_rsa(client_public_key, self.aes_key)
+            client_socket.send(encrypted_aes_key.encode('utf-8'))  
 
+            while True:
+                message = client_socket.recv(1024)
+                if not message:
+                    break  # Handle disconnection
+                self.broadcast(message, client_socket)
+        except Exception as e:
+            print(f"[ERROR] Client error: {e}")
+        finally:
+            self.clients.remove(client_socket)
+            client_socket.close()
+            
     # Démarrage du serveur
     def start(self):
         while True:
