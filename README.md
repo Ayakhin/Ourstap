@@ -40,7 +40,7 @@ pip install pycryptodome
 ### **1️⃣ Démarrer le serveur**
 Lance cette commande dans un terminal :
 ```bash
-python script.py server
+python chat.py server ou utiliser un venv l'executer dedans par exemple /Users/test/Ourstap/Ourstap/.venv/bin/python chat.py server
 ```
 📌 **Le serveur écoutera sur `127.0.0.1:5555` et attendra des connexions.**
 
