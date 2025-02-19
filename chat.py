@@ -65,6 +65,7 @@ class Server:
 
     # Fonction pour gérer un client connecté
     def handle_client(self, client_socket):
+        print(f"[DEBUG] Nouvelle connexion de {client_socket.getpeername()}")  # Ajout d'un debug
         client_public_key = client_socket.recv(1024)  # Récupération de la clé publique du client
         encrypted_aes_key = encrypt_rsa(client_public_key, self.aes_key)  # Chiffrement de la clé AES avec RSA
         client_socket.send(encrypted_aes_key.encode('utf-8'))  # Envoi de la clé AES chiffrée au client
