@@ -89,7 +89,7 @@ class Server:
 class Client:
     def __init__(self, host='127.0.0.1', port=5555):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Création du socket client
-        self.client.connect((host, port))  
+        self.client.connect((host, port))  # Connexion au serveur
         self.private_key, self.public_key = generate_rsa_keys()  # Génération des clés RSA
         self.client.send(self.public_key)  # Envoi de la clé publique au serveur
         encrypted_aes_key = self.client.recv(1024).decode('utf-8')  # Réception de la clé AES chiffrée
@@ -101,7 +101,6 @@ class Client:
     # Envoi d'un message au serveur
     def send_message(self, message):
         encrypted_message = encrypt_aes(self.aes_key, message.encode('utf-8'))  # Chiffrement du message
-        print(f"[DEBUG] Message chiffré AES : {encrypted_message}")
         self.client.send(json.dumps({"message": encrypted_message}).encode('utf-8'))  # Envoi au serveur
     
     # Réception des messages du serveur
