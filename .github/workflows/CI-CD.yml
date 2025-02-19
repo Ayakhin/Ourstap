@@ -29,10 +29,10 @@ jobs:
 
       - name: 🛠️ Linting (Vérification du code)
         run: |
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install flake8
-          flake8 --max-line-length=100 --ignore=E203,W503 .
+         source venv/bin/activate
+         pip install --upgrade pip
+         pip install flake8
+         flake8 --max-line-length=100 --ignore=E203,W503 --exclude=venv .
 
   test_unit:
     needs: build
