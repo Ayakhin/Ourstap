@@ -1,31 +1,48 @@
 import unittest
 from threading import Thread
-from chat import Server, Client
 import time
+from chat import Server, Client
 
 class TestIntegration(unittest.TestCase):
 
-    def setUp(self):
-        """Start server in a separate thread before each test"""
-        self.server = Server()
-        self.server_thread = Thread(target=self.server.start)
-        self.server_thread.daemon = True
-        self.server_thread.start()
+    @classmethod
+    def setUpClass(cls):
+        """Start the server before running tests"""
+        cls.server = Server(port=5566)  # Use a different port for testing
+        cls.server_thread = Thread(target=cls.server.start)
+        cls.server_thread.daemon = True
+        cls.server_thread.start()
         time.sleep(1)  # Allow server to initialize
+
+    @classmethod
+    def tearDownClass(cls):
+        """Stop the server after all tests"""
+        cls.server.server.close()
+        cls.server_thread.join(timeout=1)
 
     def test_client_to_client_communication(self):
         """Test that two clients can communicate through the server"""
-        client1 = Client()
-        client2 = Client()
+        # Start Client 1 in a separate thread
+        client1 = Client(port=5566, interactive=False)
 
+        # Start Client 2 in a separate thread
+        client2 = Client(port=5566, interactive=False)
+
+        time.sleep(1)  # Ensure both clients are connected before sending messages
+
+        # Client 1 sends a message
         client1.send_message("Hello from Client 1")
-        time.sleep(1)  # Allow message to process
+        time.sleep(1)  # Allow message processing
 
-        self.assertEqual(client2.receive_messages(), "Hello from Client 1")
+        # Client 2 receives the message
+        received_message = client2.receive_messages()
 
-    def tearDown(self):
-        """Close server after tests"""
-        self.server.server.close()
+        # Check if Client 2 received the correct message
+        self.assertEqual(received_message, "Hello from Client 1")
+
+        # Close both clients after the test
+        client1.client.close()
+        client2.client.close()
 
 if __name__ == '__main__':
     unittest.main()
