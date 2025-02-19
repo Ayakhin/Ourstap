@@ -1,17 +1,17 @@
-import socket
+import socket 
 import threading
 import json
-from Crypto.PublicKey import RSA 
-from Crypto.Cipher import PKCS1_OAEP, AES  # Importation des algorithmes de chiffrement RSA et AES
-from Crypto.Random import get_random_bytes  # Importation pour générer des octets aléatoires
-import base64  # Importation pour l'encodage et le décodage en base64
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP, AES
+from Crypto.Random import get_random_bytes 
+import base64 
 
 # Fonction pour générer une paire de clés RSA (privée et publique)
 def generate_rsa_keys():
     key = RSA.generate(2048)  # Génération d'une clé RSA de 2048 bits
-    private_key = key.export_key()  #
-    public_key = key.publickey().export_key()  
-    return private_key, public_key  
+    private_key = key.export_key()  
+    public_key = key.publickey().export_key()
+    return private_key, public_key
 
 # Fonction pour chiffrer un message avec RSA
 def encrypt_rsa(public_key, message):
@@ -22,10 +22,10 @@ def encrypt_rsa(public_key, message):
 
 # Fonction pour déchiffrer un message avec RSA
 def decrypt_rsa(private_key, encrypted_message):
-    private_key = RSA.import_key(private_key)  # Importation de la clé privée
+    private_key = RSA.import_key(private_key)
     cipher_rsa = PKCS1_OAEP.new(private_key)  # Création du déchiffreur RSA avec le mode OAEP
     decrypted_message = cipher_rsa.decrypt(base64.b64decode(encrypted_message))  # Décodage base64 et déchiffrement
-    return decrypted_message  
+    return decrypted_message
 
 # Fonction pour chiffrer un message avec AES
 def encrypt_aes(aes_key, message):
@@ -46,7 +46,7 @@ def decrypt_aes(aes_key, encrypted_message):
 class Server:
     def __init__(self, host='127.0.0.1', port=5555):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Création du socket TCP
-        self.server.bind((host, port))  # Liaison du socket à l'adresse et au port
+        self.server.bind((host, port))
         self.server.listen(5)  # Mise en écoute du serveur, avec un maximum de 5 connexions en attente
         self.clients = []  # Liste pour stocker les clients connectés
         self.aes_key = get_random_bytes(16)  # Génération d'une clé AES de 16 octets
@@ -65,19 +65,22 @@ class Server:
 
     # Fonction pour gérer un client connecté
     def handle_client(self, client_socket):
-        client_public_key = client_socket.recv(1024)  # Récupération de la clé publique du client
-        encrypted_aes_key = encrypt_rsa(client_public_key, self.aes_key)  # Chiffrement de la clé AES avec RSA
-        client_socket.send(encrypted_aes_key.encode('utf-8'))  # Envoi de la clé AES chiffrée au client
-        
-        while True:
-            try:
-                message = client_socket.recv(1024)  # Réception du message chiffré du client
-                self.broadcast(message, client_socket)  # Transmission aux autres clients
-            except:
-                self.clients.remove(client_socket)
-                client_socket.close()
-                break
+        try:
+            client_public_key = client_socket.recv(1024)  
+            encrypted_aes_key = encrypt_rsa(client_public_key, self.aes_key)
+            client_socket.send(encrypted_aes_key.encode('utf-8'))  
 
+            while True:
+                message = client_socket.recv(1024)
+                if not message:
+                    break  # Handle disconnection
+                self.broadcast(message, client_socket)
+        except Exception as e:
+            print(f"[ERROR] Client error: {e}")
+        finally:
+            self.clients.remove(client_socket)
+            client_socket.close()
+            
     # Démarrage du serveur
     def start(self):
         while True:
@@ -87,43 +90,44 @@ class Server:
 
 # Classe du client
 class Client:
-    def __init__(self, host='127.0.0.1', port=5555):
-        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Création du socket client
-        self.client.connect((host, port))  
-        self.private_key, self.public_key = generate_rsa_keys()  # Génération des clés RSA
-        self.client.send(self.public_key)  # Envoi de la clé publique au serveur
-        encrypted_aes_key = self.client.recv(1024).decode('utf-8')  # Réception de la clé AES chiffrée
-        self.aes_key = decrypt_rsa(self.private_key, encrypted_aes_key)  # Déchiffrement de la clé AES
+    def __init__(self, host='127.0.0.1', port=5555, interactive=True):
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.connect((host, port))
+        self.private_key, self.public_key = generate_rsa_keys()
+        self.client.send(self.public_key)
+        encrypted_aes_key = self.client.recv(1024).decode('utf-8')
+        self.aes_key = decrypt_rsa(self.private_key, encrypted_aes_key)
         print("Connecté au serveur !")
-        threading.Thread(target=self.receive_messages, daemon=True).start()  # Lancement du thread de réception des messages
-        self.run()
-    
-    # Envoi d'un message au serveur
+
+        threading.Thread(target=self.receive_messages, daemon=True).start()
+
+        # Only enter interactive mode for manual users
+        if interactive:
+            self.run()
+
     def send_message(self, message):
-        encrypted_message = encrypt_aes(self.aes_key, message.encode('utf-8'))  # Chiffrement du message
-        print(f"[DEBUG] Message chiffré AES : {encrypted_message}")
-        self.client.send(json.dumps({"message": encrypted_message}).encode('utf-8'))  # Envoi au serveur
-    
-    # Réception des messages du serveur
+        encrypted_message = encrypt_aes(self.aes_key, message.encode('utf-8'))
+        self.client.send(json.dumps({"message": encrypted_message}).encode('utf-8'))
+
     def receive_messages(self):
-      while True:
+        while True:
             try:
                 data = self.client.recv(1024).decode('utf-8')
-                print(f"[DEBUG] Message chiffré reçu : {data}")
                 if not data:
                     break
+                print(f"[DEBUG] Message chiffré reçu : {data}")
+
                 data = json.loads(data)
-                message = decrypt_aes(self.aes_key, data["message"]).decode('utf-8') #Dechiffrement du message
+                message = decrypt_aes(self.aes_key, data["message"]).decode('utf-8')
+
                 print(f"[DEBUG] Message déchiffré : {message}")
                 print("Message reçu:", message)
+
+                return message  # Allows tests to verify received messages
             except:
-                print("Connexion perdue avec le serveur.")
                 self.client.close()
                 break
-    def run(self):
-        while True:
-            message = input("Vous : ")
-            self.send_message(message)
+
 
 # Exécution principale
 if __name__ == "__main__":
@@ -132,4 +136,3 @@ if __name__ == "__main__":
         Server().start()
     elif sys.argv[1] == "client":
         Client()
-
