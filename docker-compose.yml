@@ -1,0 +1,19 @@
+version: '3'
+services:
+  server:
+    build: .
+    command: ["python", "chat.py", "server"]
+    ports:
+      - "5555:5555"
+
+  client1:
+    build: .
+    command: ["python", "chat.py", "client"]
+    depends_on:
+      - server
+
+  client2:
+    build: .
+    command: ["python", "chat.py", "client"]
+    depends_on:
+      - server
