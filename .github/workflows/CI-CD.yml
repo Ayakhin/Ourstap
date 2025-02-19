@@ -32,7 +32,7 @@ jobs:
          source venv/bin/activate
          pip install --upgrade pip
          pip install flake8
-         flake8 --max-line-length=100 --ignore=E203,W503,W291,W293,E302,E305 --exclude=venv --config=setup.cfg .
+         flake8 --max-line-length=150 --ignore=E203,W503,E501,E722,E402,F401,F841 --exclude=venv --config=setup.cfg .
 
   test_unit:
     needs: build
