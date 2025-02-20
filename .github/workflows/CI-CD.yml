@@ -7,7 +7,6 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:  # Ajout du déclenchement manuel
 
 jobs:
   build:
@@ -60,9 +59,8 @@ jobs:
           python -m unittest test_crypto.py
 
   deploy:
+    needs: test_unit  # Attend que les tests unitaires passent avant d'exécuter le déploiement
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'workflow_dispatch' }}
-    needs: test_unit  # Attend que les tests unitaires réussissent
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
