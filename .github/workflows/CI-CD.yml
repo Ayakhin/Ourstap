@@ -59,19 +59,19 @@ jobs:
           source venv/bin/activate
           python -m unittest test_crypto.py
 
-
   deploy:
     runs-on: ubuntu-latest
+     # Déclenchement manuel
     if: github.event_name == 'workflow_dispatch'
     steps:
-     - name: Checkout code
-       uses: actions/checkout@v3
-     - name: Simulating Deployment 🚀
-       run: |
-         echo "--------------------------------"
-         echo "✅ Build validé, tests passés"
-         echo "🚀 Simulation de déploiement..."
-         echo "--------------------------------"
-         sleep 3
-         echo "🎉 Déploiement terminé !"
-        
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Simulating Deployment 🚀
+        run: |
+          echo "--------------------------------"
+          echo "✅ Build validé, tests passés"
+          echo "🚀 Simulation de déploiement..."
+          echo "--------------------------------"
+          sleep 3
+          echo "🎉 Déploiement terminé !"
