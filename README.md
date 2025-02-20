@@ -184,3 +184,28 @@ sudo tcpdump -i lo0 port 5555 -A
 🚀 **Bon chat sécurisé !** 🔐  
 
 --- 🚀
+
+
+## Diagramme d'Architecture
+Voici le diagramme d'architecture du projet :
+
+```
+        +---------------------+       +---------------------+
+        |     Client 1        |       |     Client 2        |
+        |  (RSA Key Pair)     |       |  (RSA Key Pair)     |
+        |  AES (Session Key)  |       |  AES (Session Key)  |
+        +----------+----------+       +----------+----------+
+                   |                            |
+                   |   Clé publique RSA        |
+                   +----------------------------+
+                   |                            |
+                   | Génération Clé AES        |
+                   |   Chiffrement Message AES |
+                   +------------v-------------+
+        +---------------------------------------------+
+        |              Serveur Chat                  |
+        |  Gère les connexions et relaye les msgs    |
+        |    Stocke les clés publiques des clients   |
+        |     Envoie la clé AES chiffrée en RSA      |
+        +---------------------------------------------+
+```
