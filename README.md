@@ -1,4 +1,4 @@
-Voici la version mise à jour de votre **README.md** avec des instructions détaillées sur comment exécuter les tests et vérifier que la consigne des tests (**Unit Testing & Mock Testing** et **Integration & Modular Testing**) est bien respectée.  
+
 
 ---
 
