@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:  # Ajout du déclenchement manuel
 
 jobs:
   build:
@@ -19,14 +20,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-
-      - name: Cache Python dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-python-
 
       - name: Install dependencies
         run: |
@@ -65,3 +58,20 @@ jobs:
         run: |
           source venv/bin/activate
           python -m unittest test_crypto.py
+
+
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+     - name: Checkout code
+       uses: actions/checkout@v3
+     - name: Simulating Deployment 🚀
+       run: |
+         echo "--------------------------------"
+         echo "✅ Build validé, tests passés"
+         echo "🚀 Simulation de déploiement..."
+         echo "--------------------------------"
+         sleep 3
+         echo "🎉 Déploiement terminé !"
+        
