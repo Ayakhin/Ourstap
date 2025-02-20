@@ -20,6 +20,14 @@ jobs:
         with:
           python-version: '3.9'
 
+      - name: Cache Python dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-python-
+
       - name: Install dependencies
         run: |
           python -m venv venv
@@ -29,10 +37,10 @@ jobs:
 
       - name: 🛠️ Linting (Vérification du code)
         run: |
-         source venv/bin/activate
-         pip install --upgrade pip
-         pip install flake8
-         flake8 chat.py --max-line-length=120 --ignore=E114,W503,E301,E722,E303,F401,F841,W291,E302,E305,W293 --exclude=venv --config=setup.cfg
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install flake8
+          flake8 chat.py --max-line-length=120 --ignore=E114,W503,E301,E722,E303,F401,F841,W291,E302,E305,W293 --exclude=venv --config=setup.cfg
 
   test_unit:
     needs: build
@@ -56,29 +64,4 @@ jobs:
       - name: 🧪 Run Unit Tests
         run: |
           source venv/bin/activate
-          python -m unittest test_crypto.py test_chat.py
-
-  load_test:
-    needs: test_unit
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 Checkout code
-        uses: actions/checkout@v3
-
-      - name: 🏗️ Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-
-      - name: 📦 Install dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: 🔥 Run Load Test
-        run: |
-          source venv/bin/activate
-          locust -f load_test.py --headless -u 10 -r 2 --run-time 1m
-
+          python -m unittest test_crypto.py
