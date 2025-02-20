@@ -170,7 +170,7 @@ sudo tcpdump -i lo0 port 5555 -A
 
 🚀 **Si tous ces critères sont validés, nous avons bien respecté la consigne des tests !**
 
-## **Diagramme de séquence du chat end to end encrypter** 
+## ** 📌 Diagramme de séquence du chat end to end encrypter** 
 
 ![alt text](image.png)
 
