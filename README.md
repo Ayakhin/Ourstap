@@ -172,7 +172,7 @@ sudo tcpdump -i lo0 port 5555 -A
 
 ## **Diagramme de séquence du chat end to end encrypter** 
 
-![alt text](image.png)
+![alt text](image-1.png)
 
 ---
 
