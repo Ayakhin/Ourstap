@@ -44,7 +44,6 @@ def decrypt_aes(aes_key, encrypted_message):
     return cipher_aes.decrypt_and_verify(ciphertext, tag)  # Déchiffrement et vérification du tag
 
 class Server:
-<<<<<<< HEAD
     def __init__(self, host = "0.0.0.0", port=5555):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.bind((host, port))
@@ -52,15 +51,6 @@ class Server:
         self.clients = []
         self.aes_key = get_random_bytes(16)  # Generate AES key for encryption
         print(f"Server listening on {host}:{port}")
-=======
-    def __init__(self, host='127.0.0.1', port=5555):
-        self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Création du socket TCP
-        self.server.bind((host, port))  # Attache le serveur à l'adresse et au port
-        self.server.listen(5)  # Écoute jusqu'à 5 connexions simultanées
-        self.clients = []  # Liste des clients connectés
-        self.aes_key = get_random_bytes(16)  # Génère une clé AES aléatoire pour les échanges sécurisés
-        print(f"Server listening on {host}:{port}")  # Affichage du démarrage du serveur
->>>>>>> 1cb68e5e1b6eea3120b90190fdc285791135f343
 
     def broadcast(self, message, client_socket):
         print(f"[DEBUG] Relayed message (encrypted): {message}")  # Affichage du message chiffré
