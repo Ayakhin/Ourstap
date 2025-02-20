@@ -1,27 +1,28 @@
-# Use a lightweight Python image
-FROM python:3.9-slim
+# Utilisation d'une image Python complète avec les outils nécessaires pour la compilation
+FROM python:3.9
 
-# Set the working directory
+# Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
-# Install system dependencies required for building packages
+# Installer les dépendances système requises
 RUN apt-get update && apt-get install -y \
     build-essential \
-    python3-dev \
     libffi-dev \
+    python3-dev \
     libssl-dev \
-    gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the requirements file and install dependencies
+# Copier les fichiers de dépendances
 COPY requirements.txt .
+
+# Installer les dépendances Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the entire project into the container
+# Copier le code source dans le conteneur
 COPY . .
 
-# Expose the port for communication
+# Exposer le port utilisé par le serveur
 EXPOSE 5555
 
-# Default command to start the server
+# Commande par défaut pour lancer le serveur
 CMD ["python", "chat.py", "server"]
