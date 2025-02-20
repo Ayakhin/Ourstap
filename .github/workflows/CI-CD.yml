@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:  # Déclenchement manuel
+  workflow_dispatch:  # Ajout du déclenchement manuel
 
 jobs:
   build:
@@ -61,9 +61,8 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    # Déclenchement manuel uniquement
-    if: ${{ github.event_name == 'workflow_dispatch' }} 
-    needs: test_unit  # Dépend de l'exécution des tests unitaires
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    needs: test_unit  # Attend que les tests unitaires réussissent
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
