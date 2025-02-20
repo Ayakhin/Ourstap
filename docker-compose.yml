@@ -1,19 +1,24 @@
-version: '3'
+version: '3.8'
+
 services:
-  server:
+  chat-server:
     build: .
-    command: ["python", "chat.py", "server"]
+    container_name: chat-server
     ports:
       - "5555:5555"
+    restart: always
+    networks:
+      - chat-network
 
-  client1:
+  chat-client:
     build: .
-    command: ["python", "chat.py", "client"]
+    container_name: chat-client
     depends_on:
-      - server
+      - chat-server
+    entrypoint: ["python", "chat.py", "client"]
+    networks:
+      - chat-network
 
-  client2:
-    build: .
-    command: ["python", "chat.py", "client"]
-    depends_on:
-      - server
+networks:
+  chat-network:
+    driver: bridge

@@ -47,14 +47,14 @@ def decrypt_aes(aes_key, encrypted_message):
     cipher_aes = AES.new(aes_key, AES.MODE_EAX, nonce=nonce)
     return cipher_aes.decrypt_and_verify(ciphertext, tag)
 
-
 class Server:
-    def __init__(self, host="0.0.0.0", port=5555):
+    def __init__(self, host='0.0.0.0', port=5555):  # Changer '127.0.0.1' en '0.0.0.0'
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server.bind((host, port))
         self.server.listen(5)
         self.clients = []
-        self.aes_key = get_random_bytes(16)  # Génère une clé AES
+        self.aes_key = get_random_bytes(16)
         print(f"Server listening on {host}:{port}")
 
     def broadcast(self, message, client_socket):
@@ -90,11 +90,10 @@ class Server:
                 target=self.handle_client, args=(client_socket,)
             ).start()
 
-
 class Client:
-    def __init__(self, host='127.0.0.1', port=5555):
+    def __init__(self, host='chat-server', port=5555):  # Changer '127.0.0.1' en 'chat-server'
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client.connect((host, port))
+        self.client.connect((host, port))  # Connexion au serveur
 
         self.private_key, self.public_key = generate_rsa_keys()
         self.client.send(self.public_key)
