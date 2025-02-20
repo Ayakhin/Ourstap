@@ -1,6 +1,9 @@
 import unittest
 from chat import encrypt_rsa, decrypt_rsa, encrypt_aes, decrypt_aes, generate_rsa_keys
 from Crypto.Random import get_random_bytes
+import unittest
+from unittest.mock import patch, MagicMock
+from chat import Server, Client
 
 class TestCryptoFunctions(unittest.TestCase):
 
@@ -25,10 +28,6 @@ class TestCryptoFunctions(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 
-
-import unittest
-from unittest.mock import patch, MagicMock
-from chat import Server, Client
 
 class TestChatServer(unittest.TestCase):
 

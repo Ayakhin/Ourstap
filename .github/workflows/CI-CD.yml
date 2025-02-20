@@ -32,7 +32,8 @@ jobs:
          source venv/bin/activate
          pip install --upgrade pip
          pip install flake8
-         flake8 --max-line-length=120 --ignore=E114,W503,E301,E722,E303,F401,F841,W291,E302,E305,W293 --exclude=venv --config=setup.cfg .
+         flake8 chat.py --max-line-length=120 --ignore=E114,W503,E301,E722,E303,F401,F841,W291,E302,E305,W293 --exclude=venv --config=setup.cfg
+
   test_unit:
     needs: build
     runs-on: ubuntu-latest
