@@ -46,6 +46,7 @@ def decrypt_aes(aes_key, encrypted_message):
     ciphertext = encrypted_message[32:]  # Texte chiffré restant
     cipher_aes = AES.new(aes_key, AES.MODE_EAX, nonce=nonce)
     return cipher_aes.decrypt_and_verify(ciphertext, tag)
+    
 
 class Server:
     def __init__(self, host='0.0.0.0', port=5555):  # Changer '127.0.0.1' en '0.0.0.0'
@@ -83,12 +84,17 @@ class Server:
                 break
 
     def start(self):
-        while True:
-            client_socket, _ = self.server.accept()
-            self.clients.append(client_socket)
-            threading.Thread(
-                target=self.handle_client, args=(client_socket,)
-            ).start()
+        try:
+            while True:
+                client_socket, _ = self.server.accept()
+                self.clients.append(client_socket)
+                threading.Thread(target=self.handle_client, args=(client_socket,)).start()
+        except KeyboardInterrupt:
+            print("\nArrêt du serveur proprement...")
+            self.server.close()
+        except Exception as e:
+            print(f"Erreur serveur: {e}")
+            self.server.close()
 
 class Client:
     def __init__(self, host='chat-server', port=5555):  # Changer '127.0.0.1' en 'chat-server'
