@@ -7,27 +7,7 @@ Ce projet est une **application de chat sécurisée** utilisant un **chiffrement
 ---
  **📌 Architecture de projet**
  
-C:.
-│   chat.py
-│   docker-compose.yml
-│   Dockerfile
-│   image.png
-│   load_test.py
-│   README.md
-│   requirements.txt
-│   setup.cfg
-│   test_chat.py
-│   test_crypto.py
-│   test_integration.py
-│
-├───.github
-│   └───workflows
-│           CI-CD.yml
-│
-└───__pycache__
-        chat.cpython-312.pyc
-        load_test.cpython-312.pyc
-
+![image](https://github.com/user-attachments/assets/958fd06c-956c-4fa4-9b63-2600b9a4ded0)
 
 ---
 
