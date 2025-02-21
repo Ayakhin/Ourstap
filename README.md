@@ -5,6 +5,31 @@
 Ce projet est une **application de chat sécurisée** utilisant un **chiffrement de bout en bout (E2EE)** avec **RSA** et **AES**. Il permet à plusieurs clients de communiquer **en toute confidentialité**, garantissant que seul le destinataire peut lire les messages.
 
 ---
+ **📌 Architecture de projet**
+ 
+C:.
+│   chat.py
+│   docker-compose.yml
+│   Dockerfile
+│   image.png
+│   load_test.py
+│   README.md
+│   requirements.txt
+│   setup.cfg
+│   test_chat.py
+│   test_crypto.py
+│   test_integration.py
+│
+├───.github
+│   └───workflows
+│           CI-CD.yml
+│
+└───__pycache__
+        chat.cpython-312.pyc
+        load_test.cpython-312.pyc
+
+
+---
 
 ## **📌 Technologies Utilisées**
 - **Python** → Langage de programmation principal.
@@ -176,16 +201,6 @@ sudo tcpdump -i lo0 port 5555 -A
 
 ---
 
-## **📌 Auteur & Licence**
-👤 **Développé par : Sidy James DIATTA, Mohamed MAZU et Rayan HILLIMAN**  
-📜 **Licence : MIT**  
-📌 **Projet Open-Source - Contribuez et améliorez-le !** 🚀  
-
-🚀 **Bon chat sécurisé !** 🔐  
-
---- 🚀
-
-
 ## Diagramme d'Architecture
 Voici le diagramme d'architecture du projet :
 
@@ -209,3 +224,15 @@ Voici le diagramme d'architecture du projet :
         |     Envoie la clé AES chiffrée en RSA      |
         +---------------------------------------------+
 ```
+
+
+## **📌 Auteurs & Licence**
+👤 **Développé par : Sidy James DIATTA, Mohamed MAZU et Rayan HILLIMAN**  
+📜 **Licence : MIT**  
+📌 **Projet Open-Source - Contribuez et améliorez-le !** 🚀  
+
+🚀 **Bon chat sécurisé !** 🔐  
+
+--- 🚀
+
+
